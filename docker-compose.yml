@@ -241,7 +241,7 @@ services:
     cpus: 1.0
     user: "1000:1000"
     ports:
-      - 19090:9090
+      - 9090:9090
     networks:
       vpcbr:
         ipv4_address: 10.5.2.1
