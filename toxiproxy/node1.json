@@ -1,0 +1,8 @@
+[
+    {
+      "name": "dogechain",
+      "listen": "[::]:1478",
+      "upstream": "10.5.0.11:1478",
+      "enabled": true
+    }
+  ]

@@ -1,0 +1,262 @@
+version: "2"
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
+
+services:
+  dogechain-1:
+    image: "ubuntu:22.04"
+    mem_limit: 2g
+    user: "1000:1000"
+    stop_grace_period: 1m
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.11
+    environment:
+      - GOGC=20
+    volumes:
+      - "./bin:/usr/local/bin:ro"
+      - ./test-chain-1:/data/dogechain
+      - ./genesis.json:/genesis.json
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    entrypoint: /usr/local/bin/dogechain
+    command:
+      - "server"
+      - "--data-dir=/data/dogechain"
+      - "--chain=/genesis.json"
+      - "--seal"
+      - "--max-slots=163840"
+      - "--price-limit=50000000000"
+      - "--grpc=0.0.0.0:9632"
+      - "--libp2p=0.0.0.0:1478"
+      - "--jsonrpc=0.0.0.0:8545"
+      - "--prometheus=0.0.0.0:9090"
+      - "--prometheus-io-timer"
+      - "--max-inbound-peers=32"
+      - "--max-outbound-peers=32"
+      - "--nat=10.5.3.11:1478"
+      - "--pprof"
+      - "--pprof-address=0.0.0.0:6060"
+      - "--log-level=debug"
+
+  dogechain-toxiproxy-1:
+    image: "ghcr.io/shopify/toxiproxy:2.5.0"
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.3.11
+    volumes:
+      - "./toxiproxy/node1.json:/toxiproxy.json"
+    command: -host 0.0.0.0 -config /toxiproxy.json
+
+  dogechain-2:
+    image: "ubuntu:22.04"
+    mem_limit: 2g
+    user: "1000:1000"
+    stop_grace_period: 1m
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.12
+    environment:
+      - GOGC=20
+    volumes:
+      - "./bin:/usr/local/bin:ro"
+      - ./test-chain-2:/data/dogechain
+      - ./genesis.json:/genesis.json
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    entrypoint: /usr/local/bin/dogechain
+    command:
+      - "server"
+      - "--data-dir=/data/dogechain"
+      - "--chain=/genesis.json"
+      - "--seal"
+      - "--max-slots=163840"
+      - "--price-limit=50000000000"
+      - "--grpc=0.0.0.0:9632"
+      - "--libp2p=0.0.0.0:1478"
+      - "--jsonrpc=0.0.0.0:8545"
+      - "--prometheus=0.0.0.0:9090"
+      - "--prometheus-io-timer"
+      - "--max-inbound-peers=32"
+      - "--max-outbound-peers=32"
+      - "--nat=10.5.3.12:1478"
+      - "--pprof"
+      - "--pprof-address=0.0.0.0:6060"
+      - "--log-level=info"
+
+  dogechain-toxiproxy-2:
+    image: "ghcr.io/shopify/toxiproxy:2.5.0"
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.3.12
+    volumes:
+      - "./toxiproxy/node2.json:/toxiproxy.json"
+    command: -host 0.0.0.0 -config /toxiproxy.json
+
+  dogechain-3:
+    image: "ubuntu:22.04"
+    mem_limit: 2g
+    user: "1000:1000"
+    stop_grace_period: 1m
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.13
+    environment:
+      - GOGC=20
+    volumes:
+      - "./bin:/usr/local/bin:ro"
+      - ./test-chain-3:/data/dogechain
+      - ./genesis.json:/genesis.json
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    entrypoint: /usr/local/bin/dogechain
+    command:
+      - "server"
+      - "--data-dir=/data/dogechain"
+      - "--chain=/genesis.json"
+      - "--seal"
+      - "--max-slots=163840"
+      - "--price-limit=50000000000"
+      - "--grpc=0.0.0.0:9632"
+      - "--libp2p=0.0.0.0:1478"
+      - "--jsonrpc=0.0.0.0:8545"
+      - "--prometheus=0.0.0.0:9090"
+      - "--prometheus-io-timer"
+      - "--max-inbound-peers=32"
+      - "--max-outbound-peers=32"
+      - "--nat=10.5.3.13:1478"
+      - "--pprof"
+      - "--pprof-address=0.0.0.0:6060"
+      - "--log-level=info"
+
+  dogechain-toxiproxy-3:
+    image: "ghcr.io/shopify/toxiproxy:2.5.0"
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.3.13
+    volumes:
+      - "./toxiproxy/node3.json:/toxiproxy.json"
+    command: -host 0.0.0.0 -config /toxiproxy.json
+
+  dogechain-4:
+    image: "ubuntu:22.04"
+    mem_limit: 2g
+    user: "1000:1000"
+    stop_grace_period: 1m
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.14
+    environment:
+      - GOGC=20
+    volumes:
+      - "./bin:/usr/local/bin:ro"
+      - ./test-chain-4:/data/dogechain
+      - ./genesis.json:/genesis.json
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    entrypoint: /usr/local/bin/dogechain
+    command:
+      - "server"
+      - "--data-dir=/data/dogechain"
+      - "--chain=/genesis.json"
+      - "--seal"
+      - "--max-slots=163840"
+      - "--price-limit=50000000000"
+      - "--grpc=0.0.0.0:9632"
+      - "--libp2p=0.0.0.0:1478"
+      - "--jsonrpc=0.0.0.0:8545"
+      - "--prometheus=0.0.0.0:9090"
+      - "--prometheus-io-timer"
+      - "--max-inbound-peers=32"
+      - "--max-outbound-peers=32"
+      - "--nat=10.5.3.14:1478"
+      - "--pprof"
+      - "--pprof-address=0.0.0.0:6060"
+      - "--log-level=info"
+
+  dogechain-toxiproxy-4:
+    image: "ghcr.io/shopify/toxiproxy:2.5.0"
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.3.14
+    volumes:
+      - "./toxiproxy/node4.json:/toxiproxy.json"
+    command: -host 0.0.0.0 -config /toxiproxy.json
+
+  dogechain-5:
+    image: "ubuntu:22.04"
+    mem_limit: 2g
+    user: "1000:1000"
+    stop_grace_period: 1m
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.15
+    environment:
+      - GOGC=20
+    volumes:
+      - "./bin:/usr/local/bin:ro"
+      - ./test-chain-5:/data/dogechain
+      - ./genesis.json:/genesis.json
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    entrypoint: /usr/local/bin/dogechain
+    command:
+      - "server"
+      - "--data-dir=/data/dogechain"
+      - "--chain=/genesis.json"
+      - "--seal=false"
+      - "--max-slots=163840"
+      - "--price-limit=50000000000"
+      - "--grpc=0.0.0.0:9632"
+      - "--libp2p=0.0.0.0:1478"
+      - "--jsonrpc=0.0.0.0:8545"
+      - "--prometheus=0.0.0.0:9090"
+      - "--prometheus-io-timer"
+      - "--max-inbound-peers=32"
+      - "--max-outbound-peers=32"
+      - "--leveldb.nosync=true"
+      - "--pprof"
+      - "--pprof-address=0.0.0.0:6060"
+      - "--log-level=debug"
+
+  prometheus:
+    image: "prom/prometheus:v2.37.1"
+    mem_limit: 2gB
+    cpus: 1.0
+    user: "1000:1000"
+    ports:
+      - 19090:9090
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.2.1
+    volumes:
+      - type: bind
+        source: ./prometheus
+        target: /prometheus
+      - type: bind
+        source: ./prometheus.yml
+        target: /etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=7d'
+      - '--web.enable-lifecycle'
+
